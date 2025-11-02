@@ -1,0 +1,18 @@
+# GUI com temas modernos
+ttkbootstrap>=1.10.1
+
+# Requisições HTTP para API
+requests>=2.31.0
+urllib3
+
+# Estatísticas básicas e filtragem de outliers
+pandas>=2.2.0
+numpy>=1.24.0
+
+# Compatível com futuros gráficos ou relatórios
+matplotlib>=3.8.0
+
+# (opcional) empacotamento .exe
+pyinstaller>=6.4.0
+
+scikit-learn>=1.2.2
