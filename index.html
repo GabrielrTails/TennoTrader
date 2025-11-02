@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TennoTrader — Warframe Market Dashboard</title>
+
+  <!-- Fonts (fallback-safe if offline) -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --panel:#0f1720;
+      --muted:#9aa7bd;
+      --primary-1:#0d47a1;
+      --primary-2:#1976d2;
+      --accent:#66bb6a;
+      --glass: rgba(255,255,255,0.04);
+    }
+
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 500px at 10% 10%, rgba(25,118,210,0.06), transparent),
+                  linear-gradient(180deg, #020213 0%, var(--bg) 100%);
+      color:#e6eef8;
+      font-family: 'Roboto', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+      -webkit-text-size-adjust:100%;
+    }
+
+    .wrap{
+      max-width:1100px;
+      margin:34px auto;
+      padding:28px;
+    }
+
+    header.hero{
+      display:flex;
+      gap:20px;
+      align-items:center;
+      background: linear-gradient(90deg, rgba(13,71,161,0.08), rgba(25,118,210,0.06));
+      padding:28px;
+      border-radius:14px;
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      border: 1px solid rgba(255,255,255,0.02);
+      backdrop-filter: blur(6px);
+    }
+
+    .logo{
+      width:116px;
+      height:116px;
+      flex:0 0 116px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:14px;
+      background:linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      box-shadow: inset 0 2px 8px rgba(255,255,255,0.02);
+      overflow:hidden;
+    }
+
+    .logo img{ width:100%; height:100%; object-fit:contain; filter: drop-shadow(0 6px 18px rgba(3,6,19,0.6)); }
+
+    .hero h1{
+      margin:0;
+      font-family:'Orbitron', sans-serif;
+      letter-spacing: -0.01em;
+      font-size:34px;
+      color: #e7f3ff;
+      line-height:1.02;
+    }
+
+    .hero p.lead{
+      margin:8px 0 0 0;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap:22px;
+      margin-top:22px;
+    }
+
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:12px;
+      padding:18px;
+      border:1px solid rgba(255,255,255,0.03);
+      box-shadow: 0 8px 24px rgba(2,6,23,0.5);
+    }
+
+    h2{ color:#cfe8ff; margin:0 0 12px 0; font-size:18px; }
+    p{ margin:0 0 10px 0; color:var(--muted); }
+
+    ul.feature-list{
+      margin:12px 0 0 0;
+      padding:0;
+      list-style:none;
+      display:grid;
+      gap:8px;
+    }
+    ul.feature-list li{
+      padding:10px 12px;
+      background:var(--glass);
+      border-radius:8px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      color:#dff2ff;
+      font-weight:500;
+      font-size:14px;
+    }
+    ul.feature-list li .dot{
+      width:12px;height:12px;border-radius:3px;background:var(--accent);flex:0 0 12px;
+    }
+
+    .sidebar .summary{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top:6px;
+    }
+    .stat{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+      padding:12px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.02);
+    }
+    .stat .k{ font-size:18px; font-weight:700; color:#fff; }
+    .stat .label{ font-size:12px; color:var(--muted); margin-top:6px; }
+
+    table.tech{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:8px;
+      color: #dff2ff;
+      font-size:14px;
+    }
+    table.tech th, table.tech td{
+      text-align:left;
+      padding:8px 10px;
+      border-bottom:1px dashed rgba(255,255,255,0.03);
+    }
+    table.tech th{ color:var(--muted); font-weight:600; font-size:12px; }
+
+    pre.sample{
+      margin:14px 0 0 0;
+      background:rgba(0,0,0,0.35);
+      padding:12px;
+      border-radius:8px;
+      color:#bbdefb;
+      overflow:auto;
+      font-size:13px;
+      white-space:pre-wrap;
+    }
+
+    footer{ margin-top:18px; text-align:center; color:var(--muted); font-size:13px; }
+
+    @media (max-width:980px){
+      .grid{ grid-template-columns:1fr; }
+      .sidebar{ order:2 }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero card" role="banner">
+      <div class="logo" aria-hidden="true">
+        <!-- Ensure this relative path matches your repo: TennoTrader/R.png -->
+        <img src="TennoTrader/R.png" alt="Tenno Symbol">
+      </div>
+
+      <div style="flex:1">
+        <h1>TennoTrader</h1>
+        <p class="lead">Real‑Time Warframe Market Dashboard — smart insights for smart traders. Built for Tenno, by a Tenno.</p>
+        <p style="margin-top:14px;color:var(--muted);font-size:13px">Showcase • Market analysis • Trade signals • Lightweight desktop client</p>
+      </div>
+    </header>
+
+    <div class="grid" role="main">
+      <main class="card" aria-labelledby="about-heading">
+        <h2 id="about-heading">About the Project</h2>
+        <p>TennoTrader analyzes Warframe Market data in real time to surface items worth buying, selling, or flipping based on demand, supply and price trends.</p>
+
+        <h2 style="margin-top:14px">What it does</h2>
+        <ul class="feature-list" aria-label="features">
+          <li><span class="dot" aria-hidden="true"></span>Processes hundreds of items in seconds</li>
+          <li><span class="dot" aria-hidden="true"></span>Ranks best and worst deals via a custom score</li>
+          <li><span class="dot" aria-hidden="true"></span>Generates a Top‑10 and full market view</li>
+          <li><span class="dot" aria-hidden="true"></span>Exports insights and supports local builds</li>
+        </ul>
+
+        <h2 style="margin-top:16px">Sample output</h2>
+        <pre class="sample" aria-label="sample output">Highest scoring item: arcane_barrier (87.9p)
+Most valuable item: arcane_barrier (182.0p)
+Total items processed: 20
+
+Top 5:
+1. arcane_barrier — Score: 87.98
+2. secura_dual_cestra — Score: 69.87
+3. ftnout_prime_set — Score: 63.18
+4. strun_wraith_preview — Score: 61.00
+5. quassr_dual — Score: 55.98</pre>
+
+        <h2 style="margin-top:16px">Installation</h2>
+        <pre class="sample">git clone https://github.com/GabrielrTails/TennoTrader.git
+cd TennoTrader
+python main.py</pre>
+
+        <h2 style="margin-top:16px">Notes</h2>
+        <p style="color:var(--muted)">Early project — first experience using Python for a desktop app. The provided <code>.exe</code> is a bundled script; review or run the source directly if preferred.</p>
+
+        <footer style="margin-top:14px">Made with care by Gabriel • TennoTrader © 2025</footer>
+      </main>
+
+      <aside class="sidebar" aria-labelledby="summary-heading">
+        <div class="card">
+          <h2 id="summary-heading">Quick Summary</h2>
+          <div class="summary" role="status" aria-live="polite">
+            <div class="stat"><div class="k">Items processed</div><div class="label">20</div></div>
+            <div class="stat"><div class="k">High demand items</div><div class="label">0</div></div>
+            <div class="stat"><div class="k">Top score</div><div class="label">arcane_barrier — 87.9p</div></div>
+            <div class="stat"><div class="k">Most valuable</div><div class="label">arcane_barrier — 182.0p</div></div>
+          </div>
+
+          <h2 style="margin-top:12px">Tech stack</h2>
+          <table class="tech" role="table" aria-label="tech stack">
+            <thead>
+              <tr><th>Skillset</th><th>Tools</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Data</td><td>Python; Pandas</td></tr>
+              <tr><td>UI</td><td>Tkinter</td></tr>
+              <tr><td>Integration</td><td>Warframe Market API</td></tr>
+              <tr><td>Logic</td><td>Custom scoring algorithm</td></tr>
+            </tbody>
+          </table>
+
+          <h2 style="margin-top:12px">About me</h2>
+          <p style="color:var(--muted)">I'm Gabriel — a self-taught developer blending gaming, data and automation to build useful tools. First Python project but already surfacing valuable market signals.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</body>
+</html>
